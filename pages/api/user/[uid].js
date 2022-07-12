@@ -9,8 +9,20 @@ export default function handler(req, res) {
     get(child(dbRef, "/user/"+uid.toLowerCase())).then((snapshot) => {
         if (snapshot.exists()) {
         var data = snapshot.val();
-        res.status(200).json(data)
+        const projectdata = []
+
+        if (data.projects != undefined) {
+            const projectkeys = Object.keys(data.projects)
+            for (var i =0; i < projectkeys.length ;i++) {
+                var k = data.projects[projectkeys[i]]
+                projectdata.push(k)   
+            }
         }
+        else {}
+
+        res.status(200).json({"profile":data.profile,"projects":projectdata})
+        }
+        
     }).catch((error) => {
         console.error(error);
     });
